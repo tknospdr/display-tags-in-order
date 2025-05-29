@@ -9,7 +9,7 @@
     >
       <div class="tag-group-item">
         {{item}}
-        <button {{action "remove" item}} class="btn btn-danger btn-small">{{i18n "force_tag_group_order.remove"}}</button>
+        <button {{on "click" (fn this.remove item)}} class="btn btn-danger btn-small">{{i18n "force_tag_group_order.remove"}}</button>
       </div>
     </DndList>
     <h4>{{i18n "force_tag_group_order.available_groups"}}</h4>
