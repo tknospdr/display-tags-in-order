@@ -2,7 +2,7 @@
 # about: Preserves the order of tags as they were added to a topic
 # version: 0.1
 # authors: David Muszynski
-# url: https://github.com/your-repo/display-tags-in-order
+# url: https://github.com/tknospdr/display-tags-in-order
 
 enabled_site_setting :display_tags_in_order_enabled
 
