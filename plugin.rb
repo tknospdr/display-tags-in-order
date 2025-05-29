@@ -8,9 +8,18 @@ enabled_site_setting :display_tags_in_order_enabled
 
 after_initialize do
   add_to_serializer(:topic_view, :tags) do
-    object.topic.tags.order('topic_tags.id').pluck(:name)
+    if object&.topic&.tags&.exists?
+      object.topic.tags.joins(:topic_tags).order('topic_tags.id').pluck('tags.name')
+    else
+      []
+    end
   end
+
   add_to_serializer(:basic_topic, :tags) do
-    object.tags.order('topic_tags.id').pluck(:name)
+    if object&.tags&.exists?
+      object.tags.joins(:topic_tags).order('topic_tags.id').pluck('tags.name')
+    else
+      []
+    end
   end
 end
