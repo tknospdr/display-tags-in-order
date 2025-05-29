@@ -7,16 +7,13 @@
 enabled_site_setting :force_tag_group_order_enabled
 
 after_initialize do
-  Rails.logger.info("[force-tag-group-order] Initializing plugin for Discourse #{Discourse::VERSION::STRING}")
-
-  # Define site setting as a string
-  SiteSetting.define :force_tag_group_order, default: '', type: :string, description: "Comma-separated list of tag group names in display order (e.g., Genus,Species)"
+  Rails.logger.info("[force_tag_group_order] Initializing plugin for Discourse #{Discourse::VERSION::STRING}")
 
   # Helper to get prioritized tag groups
   module TagGroupOrderHelper
     def ordered_tag_groups
       return [] unless SiteSetting.force_tag_group_order_enabled
-      tag_group_names = SiteSetting.force_tag_group_order.split(',').map(&:strip).reject(&:empty?)
+      tag_group_names = SiteSetting.get(:force_tag_group_order).to_s.split(',').map(&:strip).reject(&:empty?)
       TagGroup.where(name: tag_group_names).sort_by { |tg| tag_group_names.index(tg.name) || Float::INFINITY }
     end
   end
@@ -65,10 +62,10 @@ after_initialize do
 
       # Combine and return tag names
       result = (prioritized_tags + other_tags).map { |tag_name, _, _| tag_name }
-      Rails.logger.info("[force-tag-group-order] Topic #{object.topic.id}: Ordered tags: #{result.inspect}")
+      Rails.logger.info("[force_tag_group_order] Topic #{object.topic.id}: Ordered tags: #{result.inspect}")
       result
     rescue StandardError => e
-      Rails.logger.error("[force-tag-group-order] Error in topic_view serializer for topic #{object&.topic&.id || 'nil'}: #{e.message}")
+      Rails.logger.error("[force_tag_group_order] Error in topic_view serializer for topic #{object&.topic&.id || 'nil'}: #{e.message}")
       []
     end
   end
@@ -116,10 +113,10 @@ after_initialize do
 
       # Combine and return tag names
       result = (prioritized_tags + other_tags).map { |tag_name, _, _| tag_name }
-      Rails.logger.info("[force-tag-group-order] Basic topic #{object.id}: Ordered tags: #{result.inspect}")
+      Rails.logger.info("[force_tag_group_order] Basic topic #{object.id}: Ordered tags: #{result.inspect}")
       result
     rescue StandardError => e
-      Rails.logger.error("[force-tag-group-order] Error in basic_topic serializer for topic #{object&.id || 'nil'}: #{e.message}")
+      Rails.logger.error("[force_tag_group_order] Error in basic_topic serializer for topic #{object&.id || 'nil'}: #{e.message}")
       []
     end
   end
