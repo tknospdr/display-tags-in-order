@@ -1,0 +1,27 @@
+<div class="force-tag-group-order">
+  <h3>{{i18n "force_tag_group_order.title"}}</h3>
+  <p>{{i18n "force_tag_group_order.description"}}</p>
+  {{#if tagGroups.length}}
+    <DndList
+      @items={{this.selectedOrder}}
+      @onChange={{this.updateOrder}}
+      as |item|
+    >
+      <div class="tag-group-item">
+        {{item}}
+        <button {{action "remove" item}} class="btn btn-danger btn-small">{{i18n "force_tag_group_order.remove"}}</button>
+      </div>
+    </DndList>
+    <h4>{{i18n "force_tag_group_order.available_groups"}}</h4>
+    <select onchange={{action "addTagGroup" value="target.value"}}>
+      <option value="">{{i18n "force_tag_group_order.select_group"}}</option>
+      {{#each tagGroups as |group|}}
+        {{#unless (includes this.selectedOrder group.name)}}
+          <option value={{group.name}}>{{group.name}}</option>
+        {{/unless}}
+      {{/each}}
+    </select>
+  {{else}}
+    <p>{{i18n "force_tag_group_order.no_groups"}}</p>
+  {{/if}}
+</div>
