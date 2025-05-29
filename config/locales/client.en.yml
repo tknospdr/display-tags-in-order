@@ -1,0 +1,8 @@
+en:
+  force_tag_group_order:
+    title: "Force Tag Group Order"
+    description: "Select the order in which tag groups should display on topics. Tags within prioritized groups appear first, followed by other tags alphabetically."
+    select_group: "Select a tag group"
+    remove: "Remove"
+    available_groups: "Available Tag Groups"
+    no_groups: "No tag groups found. Create tag groups in the admin panel first."
