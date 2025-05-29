@@ -29,6 +29,20 @@ export default class ForceTagGroupOrder extends Component {
     this.saveOrder();
   }
 
+  @action
+  addTagGroup(value) {
+    if (value && !this.selectedOrder.includes(value)) {
+      this.selectedOrder = [...this.selectedOrder, value];
+      this.saveOrder();
+    }
+  }
+
+  @action
+  remove(groupName) {
+    this.selectedOrder = this.selectedOrder.filter(name => name !== groupName);
+    this.saveOrder();
+  }
+
   async saveOrder() {
     try {
       await this.ajax.request('/admin/plugins/force-tag-group-order', {
