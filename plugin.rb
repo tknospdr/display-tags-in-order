@@ -6,17 +6,17 @@
 
 enabled_site_setting :force_tag_group_order_enabled
 
-# Define site setting for tag group order
-register_site_setting :force_tag_group_order, type: :json, default: [], description: "List of tag group names in display order (e.g., ['Genus', 'Species'])"
-
 after_initialize do
   Rails.logger.info("[force-tag-group-order] Initializing plugin for Discourse #{Discourse::VERSION::STRING}")
+
+  # Define site setting as a string
+  SiteSetting.define :force_tag_group_order, default: '', type: :string, description: "Comma-separated list of tag group names in display order (e.g., Genus,Species)"
 
   # Helper to get prioritized tag groups
   module TagGroupOrderHelper
     def ordered_tag_groups
       return [] unless SiteSetting.force_tag_group_order_enabled
-      tag_group_names = SiteSetting.force_tag_group_order
+      tag_group_names = SiteSetting.force_tag_group_order.split(',').map(&:strip).reject(&:empty?)
       TagGroup.where(name: tag_group_names).sort_by { |tg| tag_group_names.index(tg.name) || Float::INFINITY }
     end
   end
@@ -52,7 +52,6 @@ after_initialize do
         tag_group_names = tag_groups[tag_name] || []
         prioritized_group = ordered_groups.find { |group| tag_group_names.include?(group) }
         if prioritized_group
-          # Add to prioritized tags with group index for sorting
           prioritized_tags << [tag_name, tag_id, ordered_groups.index(prioritized_group)]
         else
           other_tags << [tag_name, tag_id]
